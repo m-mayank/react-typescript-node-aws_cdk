@@ -1,6 +1,6 @@
-import { Customer } from "@web-app/customer-domain";
+import { Customer, SerializedCustomer } from "@web-app/customer-domain";
 
-let customers: Customer[] = [
+let customers: SerializedCustomer[] = [
   { id: 1, name: "ABC" },
   { id: 2, name: "PQR" },
 ];
@@ -9,32 +9,38 @@ const getMaxId = (): number =>
   (customers.reduce((prev, cur) => (prev.id > cur.id ? prev : cur)).id || 0) +
   1;
 
-const getAll = (): Customer[] => customers;
+const getAll = (): Promise<Customer[]> =>
+  Promise.resolve(customers.map((customer) => Customer.fromJSON(customer)));
 
-const getById = (id: number): Customer => {
-  const result = customers.find((customer) => customer.id === id);
-  if (result) {
-    return result;
+const getById = (id: number): Promise<Customer | undefined> => {
+  const customer = customers.find((customer) => customer.id === id);
+  return Promise.resolve(customer ? Customer.fromJSON(customer) : customer);
+};
+
+const update = (data: Customer): Promise<void> => {
+  const isExists: boolean = !!(customers.find(customer => customer.id === data.id));
+  let promise;
+  if (isExists) {
+    customers = [
+      ...customers.filter((customer) => customer.id !== data.id),
+      data.toJSON(),
+    ];
+    promise = Promise.resolve();
   } else {
-    throw new Error();
+    promise = Promise.reject(new Error("Not found"));
   }
+  return promise;
 };
 
-const update = (customer: Customer): void => {
-  customers = [
-    ...customers.filter((customer) => customer.id !== customer.id),
-    customer,
-  ];
-};
-
-const save = (customer: Customer): number => {
+const save = (customer: Customer): Promise<number> => {
   const id = getMaxId();
-  customers = [...customers, { ...customer, id }];
-  return id;
+  customers = [...customers, { ...customer.toJSON(), id }];
+  return Promise.resolve(id);
 };
 
-const deleteById = (id: number): void => {
+const deleteById = (id: number): Promise<void> => {
   customers = customers.filter((customer) => customer.id !== id);
+  return Promise.resolve();
 };
 
 export const CustomerRepository = {

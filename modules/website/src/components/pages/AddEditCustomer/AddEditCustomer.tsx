@@ -2,13 +2,15 @@ import * as React from "react";
 import { Link } from "react-router-dom";
 import { Button, ButtonTypes } from "../../atoms";
 import { Routes } from "../../../routes";
+import { CustomerService } from "../../../services";
 
 export interface AddEditCustomerProps {
   location: any;
+  history: any;
 }
 
 export interface AddEditCustomerState {
-  id: number | null;
+  id: number;
   name: string;
 }
 
@@ -19,14 +21,15 @@ export class AddEditCustomer extends React.Component<
   constructor(props: AddEditCustomerProps) {
     super(props);
     this.state = {
-      id: null,
+      id: 0,
       name: "",
     };
   }
 
   handleSave = () => {
-    // TODO - Call API to save customer
-    console.log(this.state);
+    const { update, save } = CustomerService;
+    const fn = this.state.id ? update : save;
+    fn(this.state).then(() => this.props.history.push(Routes.HOME));
   };
 
   componentDidMount() {

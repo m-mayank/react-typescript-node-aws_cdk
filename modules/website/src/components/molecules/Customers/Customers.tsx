@@ -1,10 +1,10 @@
 import * as React from "react";
-import { Customer } from "@web-app/customer-domain";
+import { SerializedCustomer } from "@web-app/customer-domain";
 import CustomerRow from "./CustomerRow";
 import CustomerHeader from "./CustomerHeader";
 
 export interface CustomersProps {
-  customers: Customer[];
+  customers: SerializedCustomer[];
   onDelete: (id: number) => void;
 }
 
@@ -21,7 +21,7 @@ export class Customers extends React.Component<CustomersProps, CustomersState> {
       <table className="table">
         <CustomerHeader />
         <tbody>
-          {this.props.customers.map((customer) => (
+          {this.props.customers.map((customer, index) => (
             <CustomerRow
               key={customer.id}
               customer={customer}

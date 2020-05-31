@@ -2,6 +2,9 @@ import express from "express";
 import { urlencoded, json } from "body-parser";
 import { CustomerService } from "./service";
 import { eventContext } from "aws-serverless-express/middleware";
+import { Customer } from "@web-app/customer-domain";
+
+const successOp = { message: "Opertion done successfully" };
 
 const configureApp = () => {
   const app = express();
@@ -9,30 +12,40 @@ const configureApp = () => {
   app.use(urlencoded({ extended: true }));
   app.use(eventContext());
 
-  app.get("/customer", (req, res) => {
-    res.send(CustomerService.get());
+  app.get("/customer", (req, res, next) => {
+    CustomerService.get()
+      .then((result) => res.send(result))
+      .catch((error) => next(error));
   });
 
-  app.get("/customer/?:id(\\d+)", (req, res) => {
-    let result, statusCode;
-    try {
-      result = CustomerService.get(Number(req.params.id));
-      statusCode = 200;
-    } catch {
-      statusCode = 404;
-      result = { message: "No Record found" };
-    }
-    res.status(statusCode).send(result);
+  app.post("/customer", (req, res, next) => {
+    const customer = Customer.fromJSON(req.body || {});
+    CustomerService.save(customer)
+      .then(() => res.send(successOp))
+      .catch((error) => next(error));
   });
 
-  app.put("/customer", (req, res) => {
-    const { id, name } = req.body || {};
-    res.send(CustomerService.save({ id, name }));
+  app.get("/customer/:id(\\d+)", (req, res, next) => {
+    CustomerService.get(Number(req.params.id))
+      .then((result) => res.status(result ? 200 : 404).send(result))
+      .catch((error) => next(error));
   });
 
-  app.post("/customer", (req, res) => {
-    const { name } = req.body || {};
-    res.send(CustomerService.save({ name }));
+  app.put("/customer/:id(\\d+)", (req, res, next) => {
+    const id = Number(req.params.id);
+    const customer = Customer.fromJSON({
+      ...(req.body || {}),
+      ...{ id },
+    });
+    CustomerService.update(customer)
+      .then(() => res.send(successOp))
+      .catch((error) => next(error));
+  });
+
+  app.delete("/customer/:id(\\d+)", (req, res, next) => {
+    CustomerService.remove(Number(req.params.id))
+      .then(() => res.send(successOp))
+      .catch((error) => next(error));
   });
 
   return app;

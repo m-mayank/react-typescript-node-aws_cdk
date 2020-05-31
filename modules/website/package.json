@@ -9,8 +9,10 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
+  "proxy": "http://localhost:3001",
   "dependencies": {
     "@web-app/customer-domain": "*",
+    "axios": "^0.19.2",
     "bootstrap": "^4.5.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",

@@ -1,14 +1,15 @@
 import * as React from "react";
 import { Link } from "react-router-dom";
-import { Customer } from "@web-app/customer-domain";
+import { SerializedCustomer } from "@web-app/customer-domain";
 import { Button } from "../../atoms";
 import { Customers } from "../../molecules";
 import { Routes } from "../../../routes";
+import { CustomerService } from "../../../services";
 
 export interface HomePageProps {}
 
 export interface HomePageState {
-  customers: Customer[];
+  customers: SerializedCustomer[];
 }
 
 export class HomePage extends React.Component<HomePageProps, HomePageState> {
@@ -20,22 +21,21 @@ export class HomePage extends React.Component<HomePageProps, HomePageState> {
   }
 
   componentDidMount() {
-    // Call API to fetch all customers
-    console.log("Fetching data");
-    const customers: Customer[] = [
-      { id: 1, name: "ABC" },
-      { id: 2, name: "PQR" },
-    ];
-    this.setState({ customers });
+    CustomerService.getAll().then((customers: SerializedCustomer[]) =>
+      this.setState({
+        customers: customers.sort((prev, curr) => prev.id - curr.id),
+      })
+    );
   }
 
   handleDelete = (id: number) => {
-    // TODO - Call API to Delete
-    console.log("Delete: ", id);
-    // On Success of API
-    this.setState({
-      customers: this.state.customers.filter((customer) => customer.id !== id),
-    });
+    CustomerService.remove(id).then(() =>
+      this.setState({
+        customers: this.state.customers.filter(
+          (customer) => customer.id !== id
+        ),
+      })
+    );
   };
 
   render() {

@@ -1,11 +1,11 @@
 import * as React from "react";
 import { Link } from "react-router-dom";
-import { Customer } from "@web-app/customer-domain";
+import { SerializedCustomer } from "@web-app/customer-domain";
 import { Button, ButtonTypes } from "../../atoms";
 import { Routes } from "../../../routes";
 
 export interface CustomerRowProps {
-  customer: Customer;
+  customer: SerializedCustomer;
   onDelete: (id: number) => void;
 }
 

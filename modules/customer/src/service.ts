@@ -1,20 +1,20 @@
 import { Customer } from "@web-app/customer-domain";
 import { CustomerRepository } from "./repository";
 
-const get = (id?: number): Customer | Customer[] =>
+const get = (id?: number): Promise<Customer | Customer[] | undefined> =>
   id ? CustomerRepository.getById(id) : CustomerRepository.getAll();
 
-const update = (customer: Customer) => {
+const update = (customer: Customer): Promise<void> => {
   // TODO - Validations
-  CustomerRepository.update(customer);
+  return CustomerRepository.update(customer);
 };
 
-const save = (customer: any) => {
+const save = (customer: Customer): Promise<number> => {
   // TODO - Validations
-  CustomerRepository.save(customer);
+  return CustomerRepository.save(customer);
 };
 
-const remove = (id: number) => CustomerRepository.deleteById(id);
+const remove = (id: number): Promise<void> => CustomerRepository.deleteById(id);
 
 export const CustomerService = {
   get,

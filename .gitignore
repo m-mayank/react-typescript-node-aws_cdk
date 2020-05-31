@@ -1,0 +1,15 @@
+# dependencies
+node_modules
+
+# testing
+coverage
+
+# artifacts
+build
+lib
+
+# log files
+*.log
+
+# Misc
+.DS_Store

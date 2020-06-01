@@ -1,4 +1,4 @@
-import configureApp from "./app";
+import { configureApp } from "./app";
 
 const port = 3001;
 const app = configureApp();

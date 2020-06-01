@@ -13,10 +13,11 @@
   },
   "devDependencies": {
     "@types/node": "^12.12.42",
-    "aws-cdk": "^1.42.0",
+    "@types/supertest": "^2.0.9",
     "lerna": "^3.22.0",
     "link-parent-bin": "git+https://github.com/m-mayank/node-link-parent-bin.git",
     "rimraf": "^3.0.2",
+    "supertest": "^4.0.2",
     "ts-node": "^8.1.0",
     "typescript": "^3.7.5"
   },

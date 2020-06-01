@@ -3,7 +3,7 @@ import * as cdk from "@aws-cdk/core";
 import { WebStack } from "./WebStack";
 import { APIStack } from "./APIStack";
 
-interface StackProps extends cdk.StackProps {
+export interface StackProps extends cdk.StackProps {
   audience: string;
 }
 

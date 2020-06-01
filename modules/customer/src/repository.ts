@@ -18,7 +18,9 @@ const getById = (id: number): Promise<Customer | undefined> => {
 };
 
 const update = (data: Customer): Promise<void> => {
-  const isExists: boolean = !!(customers.find(customer => customer.id === data.id));
+  const isExists: boolean = !!customers.find(
+    (customer) => customer.id === data.id
+  );
   let promise;
   if (isExists) {
     customers = [

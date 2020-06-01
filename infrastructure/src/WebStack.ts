@@ -3,6 +3,7 @@ import * as s3 from "@aws-cdk/aws-s3";
 import * as cf from "@aws-cdk/aws-cloudfront";
 import * as s3Deploy from "@aws-cdk/aws-s3-deployment";
 import * as apigateway from "@aws-cdk/aws-apigateway";
+import { Duration } from "@aws-cdk/core";
 
 export interface WebStackProps extends cdk.StackProps {
   audience: string;
@@ -71,7 +72,17 @@ export class WebStack extends cdk.Stack {
             s3BucketSource: this.websiteBucket,
             originAccessIdentity: this.originAccessId,
           },
-          behaviors: [{ isDefaultBehavior: true }],
+          behaviors: [
+            {
+              isDefaultBehavior: true,
+              forwardedValues: {
+                cookies: {
+                  forward: "all",
+                },
+                queryString: true,
+              },
+            },
+          ],
         },
         {
           customOriginSource: {
@@ -82,6 +93,14 @@ export class WebStack extends cdk.Stack {
             {
               pathPattern: "/api/*",
               allowedMethods: cf.CloudFrontAllowedMethods.ALL,
+              minTtl: cdk.Duration.seconds(0),
+              defaultTtl: cdk.Duration.seconds(0),
+              forwardedValues: {
+                cookies: {
+                  forward: "all",
+                },
+                queryString: true,
+              },
             },
           ],
         },

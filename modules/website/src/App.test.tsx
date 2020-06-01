@@ -1,9 +1,13 @@
-import React from 'react';
-import { render } from '@testing-library/react';
-import App from './App';
+import React from "react";
+import { shallow } from "enzyme";
+import App from "./App";
+import { Header } from "./components/atoms";
 
-test('renders learn react link', () => {
-  const { getByText } = render(<App />);
-  const linkElement = getByText(/learn react/i);
-  expect(linkElement).toBeInTheDocument();
+test("renders without crashing", () => {
+  shallow(<App />);
+});
+
+test("have <Header> component", () => {
+  const wrapper = shallow(<App />);
+  expect(wrapper.contains(<Header />)).toBeTruthy();
 });

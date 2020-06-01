@@ -6,7 +6,7 @@ import { Customer } from "@web-app/customer-domain";
 
 const successOp = { message: "Opertion done successfully" };
 
-const configureApp = () => {
+export const configureApp = () => {
   const app = express();
   const path = "/api/customer";
   const pathByID = `${path}/:id(\\d+)`;
@@ -53,5 +53,3 @@ const configureApp = () => {
 
   return app;
 };
-
-export default configureApp;

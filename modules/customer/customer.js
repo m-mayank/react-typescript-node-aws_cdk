@@ -1,5 +1,5 @@
-import { createServer, proxy } from "aws-serverless-express";
-import configureApp from "./lib/app";
+const ase = require("aws-serverless-express");
+const app = require("./lib/app");
+const server = ase.createServer(app.default(), null, []);
 
-const server = createServer(configureApp(), null, []);
-export const handler = (event, context) => proxy(server, event, context);
+exports.handler = (event, context) => ase.proxy(server, event, context);

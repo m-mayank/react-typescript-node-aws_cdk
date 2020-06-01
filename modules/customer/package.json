@@ -2,13 +2,16 @@
   "name": "@web-app/customer",
   "version": "1.0.0",
   "description": "Customer CRUD microservice",
-  "main": "index.js",
+  "main": "lib/index.js",
+  "typings": "lib/index.d.ts",
   "scripts": {
-    "clean": "rimraf lib",
+    "clean": "rimraf lib dist",
     "precompile": "npm run clean",
     "compile": "tsc",
     "start": "ts-node src/local.ts",
-    "test": "echo \"Error: no test specified\""
+    "prepackage": "rimraf dist",
+    "package": "mkdir dist && zip -q -r dist/customer.zip . -i 'lib/**' 'node_modules/**' 'customer.js' 'package.json'",
+    "test": "echo \"No test specified\""
   },
   "dependencies": {
     "@web-app/customer-domain": "*",

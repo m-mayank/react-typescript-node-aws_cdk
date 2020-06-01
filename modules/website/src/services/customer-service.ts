@@ -1,7 +1,7 @@
 import Axios from "axios";
 import { SerializedCustomer } from "@web-app/customer-domain";
 const axios = Axios.create({});
-const url = "/customer";
+const url = "/api/customer";
 
 const getAll = () => axios.get(url).then((res) => res.data);
 

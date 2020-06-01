@@ -8,30 +8,33 @@ const successOp = { message: "Opertion done successfully" };
 
 const configureApp = () => {
   const app = express();
+  const path = "/api/customer";
+  const pathByID = `${path}/:id(\\d+)`;
+
   app.use(json());
   app.use(urlencoded({ extended: true }));
   app.use(eventContext());
 
-  app.get("/customer", (req, res, next) => {
+  app.get(path, (req, res, next) => {
     CustomerService.get()
       .then((result) => res.send(result))
       .catch((error) => next(error));
   });
 
-  app.post("/customer", (req, res, next) => {
+  app.post(path, (req, res, next) => {
     const customer = Customer.fromJSON(req.body || {});
     CustomerService.save(customer)
       .then(() => res.send(successOp))
       .catch((error) => next(error));
   });
 
-  app.get("/customer/:id(\\d+)", (req, res, next) => {
+  app.get(pathByID, (req, res, next) => {
     CustomerService.get(Number(req.params.id))
       .then((result) => res.status(result ? 200 : 404).send(result))
       .catch((error) => next(error));
   });
 
-  app.put("/customer/:id(\\d+)", (req, res, next) => {
+  app.put(pathByID, (req, res, next) => {
     const id = Number(req.params.id);
     const customer = Customer.fromJSON({
       ...(req.body || {}),
@@ -42,7 +45,7 @@ const configureApp = () => {
       .catch((error) => next(error));
   });
 
-  app.delete("/customer/:id(\\d+)", (req, res, next) => {
+  app.delete(pathByID, (req, res, next) => {
     CustomerService.remove(Number(req.params.id))
       .then(() => res.send(successOp))
       .catch((error) => next(error));
